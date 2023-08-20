@@ -19,8 +19,6 @@ for c in classes:
 sorted_x = sorted(dict.items(), key=operator.itemgetter(1))
 print("Top 6 classes and pixel counts \n",sorted_x[-6:])
 
-
-
 # Find how many non-zero entries we have -- i.e. how many training data samples?
 n_samples = (roi > 0).sum()
 print('We have {n} samples'.format(n=n_samples))
