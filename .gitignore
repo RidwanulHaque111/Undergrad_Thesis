@@ -1,5 +1,5 @@
-dataset big
-dataset Small
+dataset big/
+dataset Small/
 dataset.tif
 satellite_img.tif
 satellite_img2.tif
