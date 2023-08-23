@@ -20,7 +20,6 @@ sorted_x = sorted(dict.items(), key=operator.itemgetter(1))
 print("Top 6 classes and pixel counts \n",sorted_x[-6:])
 
 
-
 # Find how many non-zero entries we have -- i.e. how many training data samples?
 n_samples = (roi > 0).sum()
 print('We have {n} samples'.format(n=n_samples))
@@ -28,13 +27,16 @@ print('We have {n} samples'.format(n=n_samples))
 # What are our classification labels?
 labels = np.unique(roi[roi > 0])
 print('The training data include {n} classes: {classes}'.format(n=labels.size,classes=labels))
+
+
 # We will need a "X" matrix containing our features, and a "y" array containing our labels
 #     These will have n_samples rows
 #     In other languages we would need to allocate these and them loop to fill them, but NumPy can be faster
 
 #X = img_b1[roi > 0, :]  
-y = roi[roi > 0]
+y = roi[roi > 0]    #y contains all the pixel values of dataset.tif
 print("Printing y = ",y)
+
 
 images = ['satellite_img.tif','satellite_img2.tif']
 final = pd.DataFrame()
@@ -74,7 +76,6 @@ for c in classes:
     
     final = pd.concat([temp, final], axis=0)
     final.reset_index(drop=True, inplace=True)
-    
     
     gc.collect()
 

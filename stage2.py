@@ -8,6 +8,15 @@ from keras.callbacks import LearningRateScheduler, EarlyStopping, ModelCheckpoin
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
+
+# Bat Algorithm parameters
+num_bats = 20  # Number of bats (population size)
+A = 1.0        # Loudness of pulses
+r = 0.5        # Pulse rate
+Qmin = 0       # Minimum frequency
+Qmax = 2       # Maximum frequency
+
+
 # Load and preprocess data
 df = pd.read_csv("final.csv")
 column_count = df.shape[1]
@@ -45,9 +54,52 @@ model.add(Dense(5, activation='softmax'))
 optimizer = Adam(learning_rate=0.001)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
-# Train the model
-model.fit(X_train, y_train, batch_size=32, epochs=10, callbacks=[lr_scheduler, early_stopping, checkpoint], validation_data=(X_test, y_test))
+
+# Initialize bat positions
+bat_positions = np.random.rand(num_bats, column_count - 1)
+
+
+# Initialize velocities and frequencies
+v = np.zeros_like(bat_positions)
+frequencies = np.zeros(num_bats)
+
+
+
+# Initialize best bat positions and their losses
+best_bat_positions = bat_positions.copy()
+best_bat_losses = np.inf * np.ones(num_bats)
+
+
+# Training loop
+for epoch in range(10):  # Adjust the number of epochs as needed
+    for i in range(num_bats):
+        # Update frequency
+        frequencies[i] = Qmin + (Qmax - Qmin) * np.random.random()
+
+        # Update bat positions
+        new_position = bat_positions[i] + v[i]
+
+        # Evaluate new position
+        new_loss = model.evaluate(np.expand_dims(new_position, axis=0), np.expand_dims(y_train[i], axis=0))[0]
+
+        # Compare current loss with best bat loss
+        if new_loss < best_bat_losses[i]:
+            if np.random.random() < r:
+                # Update the bat position and best loss
+                bat_positions[i] = new_position
+                best_bat_positions[i] = new_position
+                best_bat_losses[i] = new_loss
+
+        # Update velocities
+        v[i] += A * (best_bat_positions[i] - bat_positions[i]) * frequencies[i]
+
+# After the optimization loop, train the model using the best bat positions
+for i in range(num_bats):
+    model.fit(np.expand_dims(best_bat_positions[i], axis=0), np.expand_dims(y_train[i], axis=0), batch_size=100, epochs=10, callbacks=[lr_scheduler, early_stopping, checkpoint], validation_data=(X_test, y_test))
 
 # Evaluate the model
 score = model.evaluate(X_test, y_test, batch_size=100)
 print("\n%s: %.2f%%" % (model.metrics_names[1], score[1] * 100))
+
+
+
