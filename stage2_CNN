@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, Dropout
+from keras.layers import Conv1D, MaxPooling1D, Flatten, Dense, Dropout
 from keras.optimizers import Adam
 from keras.callbacks import LearningRateScheduler, EarlyStopping, ModelCheckpoint
 from sklearn.model_selection import train_test_split
@@ -35,22 +35,30 @@ lr_scheduler = LearningRateScheduler(lr_schedule)
 early_stopping = EarlyStopping(patience=10, restore_best_weights=True)
 checkpoint = ModelCheckpoint('best_model.h5', save_best_only=True)
 
-# Model definition
+# Reshape input data for 1D CNN
+X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
+X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
+
+# Model definition (1D CNN)
 model = Sequential()
-model.add(Dense(200, input_shape=(column_count - 1,), activation='relu'))
+model.add(Conv1D(64, kernel_size=3, activation='relu', input_shape=(X_train.shape[1], 1)))
+model.add(MaxPooling1D(pool_size=2))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(5, activation='softmax'))
 
 # Compile the model
 optimizer = Adam(learning_rate=0.001)
-model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['Accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, batch_size=32, epochs=2, callbacks=[lr_scheduler, early_stopping, checkpoint], validation_data=(X_test, y_test))
+model.fit(X_train, y_train, batch_size=32, epochs=10, callbacks=[lr_scheduler, early_stopping, checkpoint], validation_data=(X_test, y_test))
 
 # Evaluate the model
 score = model.evaluate(X_test, y_test, batch_size=32)
-print("\n%s: %.2f%% \n \n \n" % (model.metrics_names[1], score[1] * 100))
+print("\n%s: %.2f%% \n \n" % (model.metrics_names[1], score[1] * 100))
+
 
 
 #implement machine learning scoring
@@ -96,7 +104,3 @@ print("Recall: %.2f%%" % (recall * 100))
 print("F1: %.2f%%" % (f1 * 100))
 print("F1 (Macro): %.2f%%" % (f1_macro * 100))
 print("\n \n \n")
-
-
-
-

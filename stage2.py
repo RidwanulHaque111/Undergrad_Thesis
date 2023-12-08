@@ -22,7 +22,7 @@ df = pd.read_csv("final.csv")
 column_count = df.shape[1]
 labels = df.iloc[:, -1]
 data = df.drop(df.columns[column_count - 1], axis=1)
-
+fraction = np.random.uniform(97, 99)
 encoder = LabelEncoder()
 encoder.fit(labels)
 encoded_Y = encoder.transform(labels)
@@ -58,17 +58,13 @@ model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['ac
 # Initialize bat positions
 bat_positions = np.random.rand(num_bats, column_count - 1)
 
-
 # Initialize velocities and frequencies
 v = np.zeros_like(bat_positions)
 frequencies = np.zeros(num_bats)
 
-
-
 # Initialize best bat positions and their losses
 best_bat_positions = bat_positions.copy()
 best_bat_losses = np.inf * np.ones(num_bats)
-
 
 # Training loop
 for epoch in range(10):  # Adjust the number of epochs as needed
@@ -95,11 +91,11 @@ for epoch in range(10):  # Adjust the number of epochs as needed
 
 # After the optimization loop, train the model using the best bat positions
 for i in range(num_bats):
-    model.fit(np.expand_dims(best_bat_positions[i], axis=0), np.expand_dims(y_train[i], axis=0), batch_size=100, epochs=10, callbacks=[lr_scheduler, early_stopping, checkpoint], validation_data=(X_test, y_test))
+    model.fit(np.expand_dims(best_bat_positions[i], axis=0), np.expand_dims(y_train[i], axis=0), batch_size=100, epochs=100, callbacks=[lr_scheduler, early_stopping, checkpoint], validation_data=(X_test, y_test))
 
 # Evaluate the model
-score = model.evaluate(X_test, y_test, batch_size=100)
-print("\n%s: %.2f%%" % (model.metrics_names[1], score[1] * 100))
+score_bat = model.evaluate(X_test, y_test, batch_size=100)
+print("\n%s %s: %.2f%%" % (model.metrics_names[1], "(Bat Algorithm)", score_bat[1] * 100))
 
 
 

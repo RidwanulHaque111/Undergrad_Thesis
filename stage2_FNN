@@ -35,22 +35,25 @@ lr_scheduler = LearningRateScheduler(lr_schedule)
 early_stopping = EarlyStopping(patience=10, restore_best_weights=True)
 checkpoint = ModelCheckpoint('best_model.h5', save_best_only=True)
 
-# Model definition
+# Model definition (Feedforward neural network)
 model = Sequential()
-model.add(Dense(200, input_shape=(column_count - 1,), activation='relu'))
+model.add(Dense(128, input_shape=(column_count - 1,), activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(5, activation='softmax'))
 
 # Compile the model
 optimizer = Adam(learning_rate=0.001)
-model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['Accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, batch_size=32, epochs=2, callbacks=[lr_scheduler, early_stopping, checkpoint], validation_data=(X_test, y_test))
+model.fit(X_train, y_train, batch_size=32, epochs=10, callbacks=[lr_scheduler, early_stopping, checkpoint], validation_data=(X_test, y_test))
 
 # Evaluate the model
 score = model.evaluate(X_test, y_test, batch_size=32)
-print("\n%s: %.2f%% \n \n \n" % (model.metrics_names[1], score[1] * 100))
+print("\n%s: %.2f%% \n \n" % (model.metrics_names[1], score[1] * 100))
+
 
 
 #implement machine learning scoring
@@ -96,7 +99,3 @@ print("Recall: %.2f%%" % (recall * 100))
 print("F1: %.2f%%" % (f1 * 100))
 print("F1 (Macro): %.2f%%" % (f1_macro * 100))
 print("\n \n \n")
-
-
-
-

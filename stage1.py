@@ -6,7 +6,6 @@ import gc
 import os
 
 roi_ds = gdal.Open('dataset.tif', gdal.GA_ReadOnly)
-
 roi = roi_ds.GetRasterBand(1).ReadAsArray()
 
 # How many pixels are in each class?
@@ -37,8 +36,19 @@ print('The training data include {n} classes: {classes}'.format(n=labels.size,cl
 y = roi[roi > 0]    #y contains all the pixel values of dataset.tif, each pixel value represents it's corresponding class number
 print("Printing y = ",y)
 
+#iterate through a folder and get all the tiff files
+#images = [img for img in os.listdir('bands') if img.endswith(".TIF")]
 
-images = ['satellite_img.tiff',]
+"""
+images = ['D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B1.TIF', 'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B2.TIF',
+            'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B3.TIF', 'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B4.TIF',
+            'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B5.TIF', 'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B6.TIF',
+            'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B7.TIF', 'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B8.TIF',
+            'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B9.TIF', 'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B10.TIF',
+            'D:\\thesis\\thesis\\bands\\LC08_L1TP_020038_20230911_20230918_02_T1_B11.TIF']  """
+
+images = ['D:\\thesis\\thesis\\LC08_L1TP_020038_20230911_20230918_02_T1_B1.tif'] 
+          
 final = pd.DataFrame()
 
 
@@ -90,10 +100,3 @@ print(final.head())
 
 #print final.head to csv
 final.to_csv('final.csv', index=False)
-
-
-#----Train and test split----
-
-# encode class values as integers
-
-
