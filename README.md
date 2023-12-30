@@ -32,13 +32,13 @@ I have selected a small ROI from the state "Alabama", United States of America.
 * Labelled crop images were downloaded from USDA National Agricultural Statistics Service CropScape database 2022. [](https://nassgeodata.gmu.edu/CropScape/)
 * Sample satellite images were downloaded from United States Geological Survey (USGS) Earth Explorer platform. [](https://earthexplorer.usgs.gov/)
 
+![Labelled Image](https://github.com/RidwanulHaque111/Undergrad_Thesis/blob/d84d72c5d1d2ad9944239546fe350c0817510d9a/additional%20images/Labelled%20Image%20Sample.png)
+
 The labelled image and satellite image bands have the dimension of
-(8200x8200) pixels.
-
-(8200 x 8200) = 67,240,000 pixels or 67.24 million labelled crop dataset. 
-
+(8200x8200) pixels. (8200 x 8200) = 67,240,000 pixels or 67.24 million labelled crop dataset. 
 (67.24 x 5) = 336.2 million sample data are used in the research for the five satellite image bands.
 
+![Satellite Image Bands](https://github.com/RidwanulHaque111/Undergrad_Thesis/blob/d84d72c5d1d2ad9944239546fe350c0817510d9a/additional%20images/Satellite%20Image%20Bands.png)
 
 
 ## Data Preprocessing
