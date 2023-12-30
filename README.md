@@ -85,10 +85,10 @@ GDAL supports GeoTIFF. GDAL can read and work with various geospatial data forma
 
 * We have used the Bat Algorithm Optimization as the primary method.
 * Additionally, we have used these methods :
-- Simple Neural Network (SNN),
-- Convolutional Neural Network (CNN),
-- Feedforward Neural Network (FNN) 
-- Recurrent Neural Network (RNN)
+    - Simple Neural Network (SNN),
+    - Convolutional Neural Network (CNN),
+    - Feedforward Neural Network (FNN) 
+    - Recurrent Neural Network (RNN)
 
 ## Why Use Bat Algorithm?
 
